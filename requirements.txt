@@ -1,0 +1,4 @@
+tk
+customtkinter
+pypdf
+openpyxl
