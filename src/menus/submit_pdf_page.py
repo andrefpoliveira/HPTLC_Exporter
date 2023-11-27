@@ -189,7 +189,7 @@ class SubmitPdfPage(ctk.CTkFrame):
             tk.messagebox.showerror("Error", "Please close the excel file before updating it.")
             return
 
-        with open(self.controller.projects_path) as f:
+        with open(self.controller.projects_path, encoding="utf8") as f:
             projects = json.load(f)
 
         for id, p in enumerate(projects):

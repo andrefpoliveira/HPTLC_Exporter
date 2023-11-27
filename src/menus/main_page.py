@@ -35,7 +35,7 @@ class MainPage(ctk.CTkFrame):
         self.create_window()
 
     def generate_projects_list(self, text = ""):
-        with open(self.controller.projects_path) as f:
+        with open(self.controller.projects_path, encoding="utf8") as f:
             projects = json.load(f)
 
         projects = sorted(projects, key=lambda k: k["modification"], reverse=True)
@@ -67,7 +67,7 @@ class MainPage(ctk.CTkFrame):
         confirm = tk.messagebox.askyesno("Delete Project", "Are you sure you want to delete this project?")
         if not confirm: return
 
-        with open(self.controller.projects_path) as f:
+        with open(self.controller.projects_path, encoding="utf8") as f:
             projects = json.load(f)
 
         projects = [
@@ -76,7 +76,7 @@ class MainPage(ctk.CTkFrame):
 
         os.remove(project["folder"] + "/" + project["title"] + ".xlsx")
 
-        with open(self.controller.projects_path, "w", encoding="utf-8") as f:
+        with open(self.controller.projects_path, "w", encoding="utf8") as f:
             json.dump(projects, f, indent=4, ensure_ascii=False)
 
         self.generate_projects_list()

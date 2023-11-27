@@ -57,7 +57,7 @@ class NewProjectPage(ctk.CTkFrame):
         modification_date = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         samples = int(self.samples_box.get())
 
-        with open(self.controller.projects_path) as f:
+        with open(self.controller.projects_path, encoding="utf8") as f:
             projects = json.load(f)
 
         info = {
