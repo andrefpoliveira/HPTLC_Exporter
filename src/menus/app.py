@@ -1,3 +1,5 @@
+import os, sys
+
 import customtkinter as ctk
 
 from src.menus.main_page import MainPage
@@ -7,16 +9,26 @@ from src.menus.submit_pdf_page import SubmitPdfPage
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 class App(ctk.CTk):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, projects_path, *args, **kwargs):
         ctk.CTk.__init__(self, *args, **kwargs)
 
         self.WIDTH = 800
         self.HEIGHT = 500
 
+        self.projects_path = projects_path
+
         self.title("HPTLC Excel Generator")
-        self.iconbitmap("assets/favicon.ico")
+        self.iconbitmap(resource_path("favicon.ico"))
         self.geometry(f"{self.WIDTH}x{self.HEIGHT}")
         self.resizable(False, False)
 

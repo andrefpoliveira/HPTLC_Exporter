@@ -1,3 +1,5 @@
+import os, sys
+
 import customtkinter as ctk
 from functools import partial
 
@@ -32,6 +34,14 @@ colors = [
     (112, 48, 160)
 ]
 
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 class GroupWindow(ctk.CTk):
 
     def __init__(self, main_app, previous_values, *args, **kwargs):
@@ -56,7 +66,7 @@ class GroupWindow(ctk.CTk):
         self.HEIGHT = 250
 
         self.title("HPTLC - New Group")
-        self.iconbitmap("assets/favicon.ico")
+        self.iconbitmap(resource_path("favicon.ico"))
         self.geometry(f"{self.WIDTH}x{self.HEIGHT}")
         self.resizable(False, False)
 

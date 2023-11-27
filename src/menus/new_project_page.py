@@ -57,7 +57,7 @@ class NewProjectPage(ctk.CTkFrame):
         modification_date = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         samples = int(self.samples_box.get())
 
-        with open("projects.json") as f:
+        with open(self.controller.projects_path) as f:
             projects = json.load(f)
 
         info = {
@@ -77,7 +77,7 @@ class NewProjectPage(ctk.CTkFrame):
         else:
             projects.append(info)
 
-        with open("projects.json", "w", encoding="utf8") as f:
+        with open(self.controller.projects_path, "w", encoding="utf8") as f:
             json.dump(projects, f, indent=4, ensure_ascii=False)
 
         wb = Workbook()

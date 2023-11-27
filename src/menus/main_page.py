@@ -1,10 +1,23 @@
 import json
+import os
+import shutil
+import sys
 import webbrowser
 from PIL import Image
+
+import tkinter as tk
 
 import customtkinter as ctk
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class MainPage(ctk.CTkFrame):
 
@@ -22,10 +35,17 @@ class MainPage(ctk.CTkFrame):
         self.create_window()
 
     def generate_projects_list(self, text = ""):
-        with open("projects.json") as f:
+        with open(self.controller.projects_path) as f:
             projects = json.load(f)
 
+        projects = [
+            x for x in projects if os.path.exists(x["folder"] + "/" + x["title"] + ".xlsx")
+        ]
+
         projects = sorted(projects, key=lambda k: k["modification"], reverse=True)
+
+        with open(self.controller.projects_path, "w", encoding="utf-8") as f:
+            json.dump(projects, f, indent=4, ensure_ascii=False)
 
         scrollable_frame = ctk.CTkScrollableFrame(self, width = 560, height = 420)
 
@@ -33,7 +53,7 @@ class MainPage(ctk.CTkFrame):
             if text != "" and text.lower() not in p["title"].lower():
                 continue
 
-            button = ctk.CTkButton(scrollable_frame, text="", fg_color="transparent", border_width=1, border_color="white", width=560, height=50, command=lambda p=p: self.controller.open_project(p))
+            button = ctk.CTkButton(scrollable_frame, text="", fg_color="transparent", border_width=1, border_color="white", width=560, height=70, command=lambda p=p: self.controller.open_project(p))
             button.grid(row=id, column=0, pady=2)
 
             title = ctk.CTkLabel(button, text=p["title"], fg_color="transparent", font=("Arial", 12, "bold"))
@@ -43,9 +63,30 @@ class MainPage(ctk.CTkFrame):
             folder.place(x=10, y=21)
 
             modification_date = ctk.CTkLabel(button, text=p["modification"], fg_color="transparent", font=("Arial", 10))
-            modification_date.place(x=450, y=21)
+            modification_date.place(x=10, y=41)
+
+            delete_button = ctk.CTkButton(button, text="Delete", fg_color="#ff2424", hover_color="#ff0000", width=50, height=20, command=lambda p=p: self.delete_project(p))
+            delete_button.place(x=500, y=25)
 
         scrollable_frame.place(x=self.SIDEBAR_WIDTH + 10, y=60)
+
+    def delete_project(self, project):
+        confirm = tk.messagebox.askyesno("Delete Project", "Are you sure you want to delete this project?")
+        if not confirm: return
+
+        with open(self.controller.projects_path) as f:
+            projects = json.load(f)
+
+        projects = [
+            x for x in projects if x["folder"] + "/" + x["title"] + ".xlsx" != project["folder"] + "/" + project["title"] + ".xlsx"
+        ]
+
+        os.remove(project["folder"] + "/" + project["title"] + ".xlsx")
+
+        with open(self.controller.projects_path, "w", encoding="utf-8") as f:
+            json.dump(projects, f, indent=4, ensure_ascii=False)
+
+        self.generate_projects_list()
 
     def check_input_changed(self):
         if self.search_box.edit_modified():
@@ -69,7 +110,7 @@ class MainPage(ctk.CTkFrame):
             )
             button.place(x = 5, y = 20 + 35 * id)
 
-        search_icon = ctk.CTkImage(Image.open("assets/search.png"))
+        search_icon = ctk.CTkImage(Image.open(resource_path("search.png")))
         search_label = ctk.CTkLabel(self, image=search_icon, text="")
         search_label.place(x=self.SIDEBAR_WIDTH + 10, y=20)
 
