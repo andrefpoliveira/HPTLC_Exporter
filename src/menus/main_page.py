@@ -38,14 +38,7 @@ class MainPage(ctk.CTkFrame):
         with open(self.controller.projects_path) as f:
             projects = json.load(f)
 
-        projects = [
-            x for x in projects if os.path.exists(x["folder"] + "/" + x["title"] + ".xlsx")
-        ]
-
         projects = sorted(projects, key=lambda k: k["modification"], reverse=True)
-
-        with open(self.controller.projects_path, "w", encoding="utf-8") as f:
-            json.dump(projects, f, indent=4, ensure_ascii=False)
 
         scrollable_frame = ctk.CTkScrollableFrame(self, width = 560, height = 420)
 

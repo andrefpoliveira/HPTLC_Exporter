@@ -1,5 +1,6 @@
 import json, os, re
 import threading
+import subprocess
 import customtkinter as ctk
 import tkinter as tk
 
@@ -90,17 +91,17 @@ class SubmitPdfPage(ctk.CTkFrame):
 
         self.build_tracks_scrollable()
 
-        update_button = ctk.CTkButton(self.file_frame, text="Update", fg_color="#2663c4", hover_color="#0048ba", width=50, command=self.update_excel)
-        update_button.place(x=550 - 60, y=369 - 34)
+        self.update_button = ctk.CTkButton(self.file_frame, text="Update", fg_color="#2663c4", hover_color="#0048ba", width=50, command=self.update_excel, state="disabled")
+        self.update_button.place(x=550 - 60, y=369 - 34)
 
-        open_file = ctk.CTkButton(self, text="Open File", fg_color="#2663c4", hover_color="#0048ba", width=50, command=lambda: threading.Thread(target=self.open_file).start())
+        open_file = ctk.CTkButton(self, text="Open File", fg_color="#2663c4", hover_color="#0048ba", width=50, command=self.open_file)
         open_file.place(x=self.width - 140, y=self.height - 34)
 
         self.finish_button = ctk.CTkButton(self, text="Done", fg_color="#2663c4", hover_color="#0048ba", width=50, command=lambda: self.controller.show_frame("MainPage"))
         self.finish_button.place(x=self.width - 60, y=self.height - 34)
 
     def open_file(self):
-        os.system(f"{self.project['folder']}/{self.project['title']}.xlsx")
+        os.startfile(f"{self.project['folder']}/{self.project['title']}.xlsx")
 
     def choose_file(self):
         file_path = tk.filedialog.askopenfilename(title = "Select file",filetypes = (("PDF Files","*.pdf"), ("All Files","*.*")))
@@ -111,6 +112,7 @@ class SubmitPdfPage(ctk.CTkFrame):
         self.tracks_scrollable.destroy()
         self.build_tracks_scrollable()
         self.load_tracks_button.configure(state="normal")
+        self.update_button.configure(state="disabled")
 
         self.pdf_file_entry.configure(state="normal")
         self.pdf_file_entry.delete(0, "end")
@@ -169,6 +171,8 @@ class SubmitPdfPage(ctk.CTkFrame):
         self.load_tracks_button.configure(text="Load Tracks")
         self.load_tracks_button.configure(state="normal")
         self.load_tracks_button.place(x=456, y=66)
+
+        self.update_button.configure(state="normal")
 
     def update_excel(self):
         table_keys = list(self.tables.keys())
