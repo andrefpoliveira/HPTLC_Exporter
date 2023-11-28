@@ -113,7 +113,7 @@ python hptlc_exporter.py
 If you want to create an executable file, you can use [PyInstaller](https://www.pyinstaller.org/). To do so, run the following command:
 
 ```bash
-pyinstaller --onefile -w --add-data "favicon.ico;." --add-data="search.png;." --icon="favicon.ico" hptlc_exporter.py
+pyinstaller -F -w --add-data="assets/favicon.ico;assets/" --add-data="assets/search.png;assets/" --icon="assets/favicon.ico" hptlc_exporter.py
 ```
 
 The executable file will be created in the `dist` folder.

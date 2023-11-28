@@ -103,7 +103,7 @@ class MainPage(ctk.CTkFrame):
             )
             button.place(x = 5, y = 20 + 35 * id)
 
-        search_icon = ctk.CTkImage(Image.open(resource_path("search.png")))
+        search_icon = ctk.CTkImage(Image.open(resource_path("assets/search.png")))
         search_label = ctk.CTkLabel(self, image=search_icon, text="")
         search_label.place(x=self.SIDEBAR_WIDTH + 10, y=20)
 

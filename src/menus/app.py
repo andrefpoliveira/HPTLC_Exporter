@@ -28,7 +28,7 @@ class App(ctk.CTk):
         self.projects_path = projects_path
 
         self.title("HPTLC Excel Generator - v1.0.0")
-        self.iconbitmap(resource_path("favicon.ico"))
+        self.iconbitmap(resource_path("assets/favicon.ico"))
         self.geometry(f"{self.WIDTH}x{self.HEIGHT}")
         self.resizable(False, False)
 

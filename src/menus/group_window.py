@@ -66,7 +66,7 @@ class GroupWindow(ctk.CTk):
         self.HEIGHT = 250
 
         self.title("HPTLC - New Group")
-        self.iconbitmap(resource_path("favicon.ico"))
+        self.iconbitmap(resource_path("assets/favicon.ico"))
         self.geometry(f"{self.WIDTH}x{self.HEIGHT}")
         self.resizable(False, False)
 
