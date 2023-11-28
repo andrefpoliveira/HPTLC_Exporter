@@ -1,4 +1,4 @@
-# HPTLC_Creator
+# HPTLC_Exporter
 
 - [What is HPTLC?](#what-is-hptlc)
 - [Motivation and Objectives](#motivation-and-objectives)
