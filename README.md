@@ -107,13 +107,13 @@ pip install -r requirements.txt
 Finally, to run the project, run the following command:
 
 ```bash
-python hptlc_creator.py
+python hptlc_exporter.py
 ```
 
 If you want to create an executable file, you can use [PyInstaller](https://www.pyinstaller.org/). To do so, run the following command:
 
 ```bash
-pyinstaller --onefile -w --add-data "favicon.ico;." --add-data="search.png;." --icon="favicon.ico" hptlc_creator.py
+pyinstaller --onefile -w --add-data "favicon.ico;." --add-data="search.png;." --icon="favicon.ico" hptlc_exporter.py
 ```
 
 The executable file will be created in the `dist` folder.

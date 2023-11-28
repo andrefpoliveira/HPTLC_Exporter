@@ -1,13 +1,11 @@
 import json
 import os
 
-from sys import platform
-
 from src.menus.app import App
 
 def create_projects_file():
     current_file_path = os.path.realpath(__file__)
-    dir = current_file_path.replace("\\", "/").split("/")[0] + "/hptlc_creator"
+    dir = current_file_path.replace("\\", "/").split("/")[0] + "/hptlc_exporter"
 
     if not os.path.isdir(dir):
         os.mkdir(dir)
