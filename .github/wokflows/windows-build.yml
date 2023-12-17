@@ -1,0 +1,50 @@
+name: Windows Build
+
+on:
+  push:
+    tags:
+      - "*"
+
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: "Manual Testing"
+        required: true
+        default: "Manual Testing"
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup python
+        uses: actions/setup-python@v3
+        with:
+          - python-version: '3.10.8'
+
+      - name: install dependencies
+        run: pip install -r requirements.txt
+
+      - name: execute pydantic
+        run: pyinstaller -F -w --add-data="assets/favicon.ico;assets/" --add-data="assets/search.png;assets/" --icon="assets/favicon.ico" hptlc_exporter.py
+
+      - name: Get changed files
+        id: changed-files-specific
+        uses: tj-actions/changed-files@v40
+        with:
+          files: dist/hptlc_exporter.exe
+
+      - name: commit files
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        runs: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Github Action"
+          git add dist/hptlc_exporter.exe
+          git commit -m "Windows Build" -a
+
+      - name: push changes
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
