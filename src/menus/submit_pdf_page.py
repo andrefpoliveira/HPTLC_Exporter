@@ -91,7 +91,7 @@ class SubmitPdfPage(ctk.CTkFrame):
 
         self.build_tracks_scrollable()
 
-        self.update_button = ctk.CTkButton(self.file_frame, text="Update", fg_color="#2663c4", hover_color="#0048ba", width=50, command=self.update_excel, state="disabled")
+        self.update_button = ctk.CTkButton(self.file_frame, text="Update", fg_color="#2663c4", hover_color="#0048ba", width=50, command=self.check_substances, state="disabled")
         self.update_button.place(x=550 - 60, y=369 - 34)
 
         open_file = ctk.CTkButton(self, text="Open File", fg_color="#2663c4", hover_color="#0048ba", width=50, command=self.open_file)
@@ -173,6 +173,21 @@ class SubmitPdfPage(ctk.CTkFrame):
         self.load_tracks_button.place(x=456, y=66)
 
         self.update_button.configure(state="normal")
+
+    def check_substances(self):
+        table_keys = list(self.tables.keys())
+        new_tables = {}
+
+        for id, k in enumerate(table_keys):
+            if self.checkboxes[id].get():
+                new_tables[k] = self.tables[k]
+
+        substances = set(( tuple(x[i][-1] for i in range(len(x))) for x in new_tables.values()))
+        
+        if len(substances) != 1:
+            response = tk.messagebox.askyesno("Warning", "The substances in the tracks do not match. Do you want to continue?")
+            if response:
+                self.update_excel()
 
     def update_excel(self):
         table_keys = list(self.tables.keys())

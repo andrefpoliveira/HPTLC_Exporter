@@ -9,6 +9,8 @@ from src.menus.submit_pdf_page import SubmitPdfPage
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
+VERSION = "1.0.1"
+
 def resource_path(relative_path):
     try:
         base_path = sys._MEIPASS
@@ -27,7 +29,7 @@ class App(ctk.CTk):
 
         self.projects_path = projects_path
 
-        self.title("HPTLC Excel Generator - v1.0.0")
+        self.title(f"HPTLC Excel Generator - v{VERSION}")
         self.iconbitmap(resource_path("assets/favicon.ico"))
         self.geometry(f"{self.WIDTH}x{self.HEIGHT}")
         self.resizable(False, False)
