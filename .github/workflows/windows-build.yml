@@ -34,7 +34,7 @@ jobs:
         uses: tj-actions/changed-files@v40
 
       - name: List all changed files
-        run: echo steps.changed-files.outputs.all_changed_files
+        run: echo ${{steps.changed-files.outputs.all_changed_files}}
 
       - name: commit files
         if: steps.changed-files-specific.outputs.any_changed == 'true'
