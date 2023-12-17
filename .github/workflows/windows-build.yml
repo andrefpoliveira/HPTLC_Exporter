@@ -26,7 +26,7 @@ jobs:
       - name: install dependencies
         run: pip install -r requirements.txt
 
-      - name: execute pydantic
+      - name: execute pyinstaller
         run: pyinstaller -F -w --add-data="assets/favicon.ico;assets/" --add-data="assets/search.png;assets/" --icon="assets/favicon.ico" hptlc_exporter.py
 
       - name: Get changed files

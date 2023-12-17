@@ -2,3 +2,4 @@ tk
 customtkinter
 pypdf
 openpyxl
+pyinstaller
