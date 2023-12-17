@@ -32,8 +32,12 @@ jobs:
       - name: Get changed files
         id: changed-files-specific
         uses: tj-actions/changed-files@v40
-        with:
-          files: dist/hptlc_exporter.exe
+
+      - name: List all changed files
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
 
       - name: commit files
         if: steps.changed-files-specific.outputs.any_changed == 'true'
