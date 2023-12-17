@@ -17,6 +17,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: setup python
         uses: actions/setup-python@v3
         with:
@@ -36,7 +37,7 @@ jobs:
 
       - name: commit files
         if: steps.changed-files-specific.outputs.any_changed == 'true'
-        runs: |
+        run: |
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
           git add dist/hptlc_exporter.exe
