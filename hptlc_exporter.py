@@ -3,6 +3,14 @@ import os
 
 from src.menus.app import App
 
+def renovate_projects_file():
+    current_file_path = os.path.realpath(__file__)
+    dir = current_file_path.replace("\\", "/").split("/")[0] + "/hptlc_creator"
+    new_dir = current_file_path.replace("\\", "/").split("/")[0] + "/hptlc_exporter"
+
+    if os.path.isdir(dir):
+        os.rename(dir, new_dir)
+
 def create_projects_file():
     current_file_path = os.path.realpath(__file__)
     dir = current_file_path.replace("\\", "/").split("/")[0] + "/hptlc_exporter"
@@ -18,6 +26,7 @@ def create_projects_file():
 
 if __name__ == "__main__":
     try:
+        renovate_projects_file()
         projects_path = create_projects_file()
     except:
         raise Exception("Cannot create necessary files. Please contact the developer.")
