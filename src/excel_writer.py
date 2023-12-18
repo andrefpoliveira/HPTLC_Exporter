@@ -77,14 +77,14 @@ class ExcelWriter:
         )
 
 
-    def build_sheet_structure(self, name: str, data: dict) -> None:
+    def build_sheet_structure(self, name: str, data: dict, force=False) -> None:
         """
         Builds a sheet from a dictionary.
 
         :param name: The name of the sheet.
         :param data: The data necessarity to build the sheet (groups, samples, and substances).
         """
-        if name in self.wb.sheetnames: return
+        if name in self.wb.sheetnames and not force: return
 
         sheet = self.get_sheet(name)
         groups, samples, substances = data["groups"], data["samples"], data["substances"]
@@ -126,15 +126,34 @@ class ExcelWriter:
 
                 self.modify_cell(sheet, row + 1, column=2 + x * (7 + 1), value="TOTAL", bold=True)
                 self.modify_cell(sheet, row + 1, column=2 + x * (7 + 1) + 1, value=f"=SUM({get_column_letter(column+1)}{row-table_size+1}:{get_column_letter(column+1)}{row})", alignment = "center")
+                self.modify_cell(sheet, row + 1, column=2 + x * (7 + 1) + 2, value=f"=SUM({get_column_letter(column+2)}{row-table_size+1}:{get_column_letter(column+2)}{row})", alignment = "center")
                 self.modify_cell(sheet, row + 1, column=2 + x * (7 + 1) + 3, value=f"=SUM({get_column_letter(column+3)}{row-table_size+1}:{get_column_letter(column+3)}{row})", alignment = "center")
+                self.modify_cell(sheet, row + 1, column=2 + x * (7 + 1) + 4, value=f"=SUM({get_column_letter(column+4)}{row-table_size+1}:{get_column_letter(column+4)}{row})", alignment = "center")
 
-    def fill_values(self, name: str, data: dict) -> None:
+
+    def has_percentage_total(self, name: str) -> bool:
+        """
+        Checks if the sheet has a percentage total.
+
+        :param name: The name of the sheet.
+        :return: Whether the sheet has a percentage total or not.
+        """
+        sheet = self.get_sheet(name)
+
+        c_value = sheet.cell(11, 4).value
+        return c_value is not None and c_value.strip() != ""
+    
+
+    def fill_values(self, name: str, data: dict, project_config: dict) -> None:
         """
         Fill the HPTLC values in the sheet.
 
         :param name: The name of the sheet.
         :param data: The data necessarity to fill the sheet (samples, group_id, number, table, left_col).
         """
+        if not self.has_percentage_total(name):
+            self.build_sheet_structure(name, project_config, force = True)
+
         sheet = self.get_sheet(name)
         samples, group_id, number, table, left_col = data["samples"], data["group_id"], data["number"], data["table"], data["left_col"]
 

@@ -9,7 +9,7 @@ from src.menus.submit_pdf_page import SubmitPdfPage
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
-VERSION = "1.0.1"
+VERSION = "1.0.2"
 
 def resource_path(relative_path):
     try:

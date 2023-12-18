@@ -188,6 +188,8 @@ class SubmitPdfPage(ctk.CTkFrame):
             response = tk.messagebox.askyesno("Warning", "The substances in the tracks do not match. Do you want to continue?")
             if response:
                 self.update_excel()
+        else:
+            self.update_excel()
 
     def update_excel(self):
         table_keys = list(self.tables.keys())

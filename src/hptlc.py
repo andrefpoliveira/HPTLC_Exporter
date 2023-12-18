@@ -89,8 +89,10 @@ class HptlcReader:
             substances = [x[-1] for x in tables[k]]
 
             organ, group, number = re.findall(r"Track \d+, ID: ([a-zA-Z ]*) ([a-zA-Z]+) *(\d+) \(.*", k)[0]
+
+            project_config = {"groups": groups, "samples": samples, "substances": substances}
             
-            self.excel_writer.build_sheet_structure(organ, {"groups": groups, "samples": samples, "substances": substances})
-            self.excel_writer.fill_values(organ, {"samples": samples, "group_id": [x["acronym"] for x in groups].index(group), "number": int(number), "table": tables[k], "left_col": id % 2 == 0})
+            self.excel_writer.build_sheet_structure(organ, project_config)
+            self.excel_writer.fill_values(organ, {"samples": samples, "group_id": [x["acronym"] for x in groups].index(group), "number": int(number), "table": tables[k], "left_col": id % 2 == 0}, project_config)
     
         self.excel_writer.save()
