@@ -14,39 +14,18 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
 
-      - name: setup python
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.10.8'
+    - name: Package Application
+      uses: JackMcKew/pyinstaller-action-windows@main
+      with:
+        path: .
 
-      - name: install dependencies
-        run: pip install -r requirements.txt
-
-      - name: execute pyinstaller
-        run: pyinstaller -F -w --add-data="assets/favicon.ico;assets/" --add-data="assets/search.png;assets/" --icon="assets/favicon.ico" hptlc_exporter.py
-
-      - name: Get changed files
-        id: changed-files-specific
-        uses: tj-actions/changed-files@v40
-
-      - name: List all changed files
-        run: echo ${{steps.changed-files.outputs.all_changed_files}}
-
-      - name: commit files
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "Github Action"
-          git add dist/hptlc_exporter.exe
-          git commit -m "Windows Build" -a
-
-      - name: push changes
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+    - uses: actions/upload-artifact@v2
+      with:
+        name: name-of-artifact
+        path: ./dist/windows
