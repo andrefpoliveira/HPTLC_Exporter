@@ -10,7 +10,7 @@ from src.general.utils.utils import resource_path
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
-VERSION = "1.2.1"
+VERSION = "1.2.2"
 
 class App(ctk.CTk):
 
