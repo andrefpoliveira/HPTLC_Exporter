@@ -3,11 +3,12 @@
 
 a = Analysis(
     ['hptlc_exporter.py'],
-    pathex=[],
+    pathex=['src'],
     binaries=[],
     datas=[('assets/favicon.ico', 'assets/'), ('assets/search.png', 'assets/')],
     hiddenimports=[],
     hookspath=[],
+    hooksconfig={},
     runtime_hooks=[],
     excludes=[],
     noarchive=False,

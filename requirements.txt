@@ -3,3 +3,5 @@ customtkinter
 pypdf
 openpyxl
 pyinstaller
+requests
+webbrowser

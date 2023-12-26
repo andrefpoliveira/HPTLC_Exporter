@@ -1,5 +1,7 @@
 import json
 import os
+import requests
+import webbrowser
 
 from src.general.gui.app import App
 

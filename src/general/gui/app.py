@@ -1,5 +1,7 @@
-import importlib
+import importlib, requests, webbrowser
+from sys import exit
 
+import tkinter as tk
 import customtkinter as ctk
 
 from src.general.gui.main_page import MainPage
@@ -8,7 +10,7 @@ from src.general.utils.utils import resource_path
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 
 class App(ctk.CTk):
 
@@ -36,6 +38,28 @@ class App(ctk.CTk):
         ]
 
         self.show_frame()
+        self.check_version()
+
+    def get_latest_version(self):
+        url = "https://api.github.com/repos/andrefpoliveira/hptlc_exporter/releases/latest"
+        response = requests.get(url)
+        return response.json()["tag_name"][1:]
+    
+    def check_version(self):
+        latest_version = self.get_latest_version()
+        if any([int(latest_version.split(".")[i]) > int(VERSION.split(".")[i]) for i in range(3)]):
+            response = requests.get("https://api.github.com/repos/andrefpoliveira/hptlc_exporter/releases/latest")
+            assets = response.json()["assets"]
+            for asset in assets:
+                if asset["name"] == "hptlc_exporter.exe":
+                    url = asset["browser_download_url"]
+                    break
+
+            response = tk.messagebox.askyesno("Update available", f"An update is available (v{latest_version}). Please download it. Do you want to open the download page?")
+            if response:
+                webbrowser.open(url)
+
+            exit()
 
     def add_frame(self, frame):
         self.frame_stack.append(frame)
