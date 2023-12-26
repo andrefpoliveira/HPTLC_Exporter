@@ -1,23 +1,16 @@
 import json
 import os
-import shutil
-import sys
 import webbrowser
 from PIL import Image
+
+from src.general.utils.utils import resource_path
+from src.general.gui.project_type_window import ProjectTypeWindow
 
 import tkinter as tk
 
 import customtkinter as ctk
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
-
-def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
 
 class MainPage(ctk.CTkFrame):
 
@@ -34,6 +27,14 @@ class MainPage(ctk.CTkFrame):
     def reset(self):
         self.create_window()
 
+    def open_project_type_window(self):
+        self.window = ProjectTypeWindow(self)
+        self.window.mainloop()
+
+    def create_project(self, project_type):
+        self.after(100, self.window.destroy)
+        self.controller.create_project(project_type)
+        
     def generate_projects_list(self, text = ""):
         with open(self.controller.projects_path, encoding="utf8") as f:
             projects = json.load(f)
@@ -113,7 +114,7 @@ class MainPage(ctk.CTkFrame):
 
         self.after(200, self.check_input_changed)
 
-        new_project_button = ctk.CTkButton(self, height=30, text="New Project", fg_color="#2663c4", hover_color="#0048ba", command=lambda: self.controller.show_frame("NewProjectPage"))
+        new_project_button = ctk.CTkButton(self, height=30, text="New Project", fg_color="#2663c4", hover_color="#0048ba", command=lambda: self.open_project_type_window())
         new_project_button.place(x=self.SIDEBAR_WIDTH + 450, y=20)
 
         self.generate_projects_list()

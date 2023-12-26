@@ -6,21 +6,22 @@ import tkinter as tk
 
 from datetime import datetime
 
-from src.hptlc import HptlcReader
+from src.general.enum.project_type_enum import ProjectTypeEnum
+from src.projects.dissertation.writer.excel_writer import DissertationExcelWriter
+from src.projects.dissertation.reader.hptlc_reader import DissertationHptlcReader
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
 class SubmitPdfPage(ctk.CTkFrame):
 
-    def __init__(self, parent, controller, width, height):
+    def __init__(self, parent, controller, width, height, project):
         ctk.CTkFrame.__init__(self, parent, width=width, height=height)
 
         self.controller = controller
         self.width = width
         self.height = height
-
-        self.project = None
+        self.project = project
 
         self.create_window()
 
@@ -97,7 +98,7 @@ class SubmitPdfPage(ctk.CTkFrame):
         open_file = ctk.CTkButton(self, text="Open File", fg_color="#2663c4", hover_color="#0048ba", width=50, command=self.open_file)
         open_file.place(x=self.width - 140, y=self.height - 34)
 
-        self.finish_button = ctk.CTkButton(self, text="Done", fg_color="#2663c4", hover_color="#0048ba", width=50, command=lambda: self.controller.show_frame("MainPage"))
+        self.finish_button = ctk.CTkButton(self, text="Done", fg_color="#2663c4", hover_color="#0048ba", width=50, command=lambda: self.controller.pop_frame())
         self.finish_button.place(x=self.width - 60, y=self.height - 34)
 
     def open_file(self):
@@ -139,7 +140,7 @@ class SubmitPdfPage(ctk.CTkFrame):
         self.load_tracks_button.configure(text="Loading...")
         self.load_tracks_button.place(x=470, y=66)
 
-        self.reader = HptlcReader(self.pdf_file_entry.get(), self.project["folder"] + "/" + self.project["title"] + ".xlsx")
+        self.reader = DissertationHptlcReader(self.pdf_file_entry.get(), ProjectTypeEnum.get_regex(self.project["type"]), self.project["folder"] + "/" + self.project["title"] + ".xlsx")
         self.tables = self.reader.extract_info()
 
         substances_count = [len(self.tables[t]) for t in self.tables]
@@ -148,7 +149,7 @@ class SubmitPdfPage(ctk.CTkFrame):
         checked = [False for t in self.tables]
 
         for id, k in enumerate(self.tables):
-            m = re.findall("Track (\d+), ID: (.*) (.*) \(.*", k)
+            m = re.findall(ProjectTypeEnum.get_regex(self.project["type"]), k)
             if len(m) == 0: continue
             if len(self.tables[k]) != most_frequent_substances_count: continue
             if any(len(re.findall(r"\d", x[0])) == 0 for x in self.tables[k]): continue

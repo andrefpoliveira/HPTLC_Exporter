@@ -1,7 +1,7 @@
-import os, sys
-
 import customtkinter as ctk
 from functools import partial
+
+from src.general.utils.utils import resource_path
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -33,14 +33,6 @@ colors = [
     (0, 112, 192),
     (112, 48, 160)
 ]
-
-def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
 
 class GroupWindow(ctk.CTk):
 

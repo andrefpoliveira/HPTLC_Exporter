@@ -3,13 +3,16 @@ from __future__ import annotations
 import re
 
 from pypdf import PdfReader
-from src.excel_writer import ExcelWriter
+from src.general.writer.excel_writer import ExcelWriter
 
-class HptlcReader:
-    def __init__(self, filename: str, output: str = "Teste.xlsx") -> HptlcReader:
+from abc import ABC, abstractmethod
+
+class HptlcReader(ABC):
+    def __init__(self, filename: str, regex_expression: str, excel_writer: ExcelWriter, output: str = "Teste.xlsx") -> HptlcReader:
         self.filename = filename
+        self.regex_expression = regex_expression
         self.output = output
-        self.excel_writer = ExcelWriter(self.output)
+        self.excel_writer = excel_writer(self.output)
         self.text = self.pdf_to_text()
 
 
@@ -74,6 +77,7 @@ class HptlcReader:
         return table
 
 
+    @abstractmethod
     def build_excel(self, tables, configuration):
         """
         Builds the excel file from the tables and the configuration.
@@ -88,7 +92,7 @@ class HptlcReader:
         for id, k in enumerate(keys):
             substances = [x[-1] for x in tables[k]]
 
-            organ, group, number = re.findall(r"Track \d+, ID: ([a-zA-Z ]*) ([a-zA-Z]+) *(\d+) \(.*", k)[0]
+            organ, group, number = re.findall(self.regex_expression, k)[0]
 
             project_config = {"groups": groups, "samples": samples, "substances": substances}
             

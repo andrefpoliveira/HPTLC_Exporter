@@ -1,7 +1,7 @@
 import json
 import os
 
-from src.menus.app import App
+from src.general.gui.app import App
 
 def renovate_projects_file():
     current_file_path = os.path.realpath(__file__)
@@ -18,9 +18,17 @@ def create_projects_file():
     if not os.path.isdir(dir):
         os.mkdir(dir)
 
-    if not os.path.exists(dir + "/projects.json"):
-        with open(dir + "/projects.json", "w", encoding="utf8") as f:
-            json.dump([], f, indent=4, ensure_ascii=False)
+    projects = []
+    if os.path.exists(dir + "/projects.json"):
+        with open(dir + "/projects.json", encoding="utf8") as f:
+            projects = json.load(f)
+
+        for p in projects:
+            if "type" not in p:
+                p["type"] = "dissertation"
+
+    with open(dir + "/projects.json", "w", encoding="utf8") as f:
+        json.dump(projects, f, indent=4, ensure_ascii=False)
 
     return dir + "/projects.json"
 
